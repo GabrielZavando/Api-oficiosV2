@@ -24,7 +24,6 @@ const UsuarioSchema = Schema({
     type: String,
     required: [true, 'La contraseña es obligatoria'],
     minlength: [6, 'La contraseña debe tener al menos 6 caracteres'],
-    maxlength: [20, 'La contraseña no puede tener más de 20 caracteres']
   },
   telefono: {
     type: String,
@@ -43,6 +42,10 @@ const UsuarioSchema = Schema({
     required: true,
     default: 'USER_ROL',
     enum: ['ADMIN_ROL', 'USER_ROL']
+  },
+  emprendimiento: {
+    type: Schema.Types.ObjectId,
+    ref: 'Emprendimiento'
   },
   estado: {
     type: Boolean,

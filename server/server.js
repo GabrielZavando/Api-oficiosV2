@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 
 // Rutas
+const usuarios = require('../routes/usuarios')
 
 // Config Base de datos
 const {dbConnection} = require('../database/config')
@@ -16,6 +17,8 @@ class Server{
     this.conectarDB()
 
     this.middlewares()
+
+    this.routes()
   }
 
   async conectarDB(){
@@ -25,7 +28,16 @@ class Server{
   middlewares(){
     // Cors // hay que configurarlo más. Sirve para restringir accesos de url indeseadas
     this.app.use(cors())
+
+    // Lectura y parseo del body
+    this.app.use(express.json())
+
+    // Directorio público
     this.app.use(express.static('public'))
+  }
+
+  routes(){
+    this.app.use('/api/v1/usuarios', usuarios)
   }
 
   listen(){

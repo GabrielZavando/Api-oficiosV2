@@ -16,7 +16,15 @@ const emailExiste = async(correo = '') => {
   }
 }
 
+const nickExiste = async(nick = '') => {
+  const existeEmail = await Usuario.findOne({nick})
+  if(nickEmail){
+    throw new Error(`El nombre de usuario ${nick} ya está registrado, por favor eliga uno distinto`)
+  }
+}
+
 module.exports = {
   esOficioValido,
-  emailExiste
+  emailExiste,
+  nickExiste
 }
