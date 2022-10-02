@@ -3,6 +3,7 @@ const {Schema, model} = require('mongoose')
 const UsuarioSchema = Schema({
   nick: {
     type: String,
+    unique: true,
     required: [true, 'El nombre de usuario es obligatorio'],
     maxlength: [12, 'El nombre de usuario no puede tener más de 12 caracteres']
   },
@@ -17,8 +18,7 @@ const UsuarioSchema = Schema({
   correo: {
     type: String,
     required: [true, 'El correo es obligatorio'],
-    unique: true,
-    maxlength: [30, 'El correo no puede tener más de 30 caracteres']
+    unique: true
   },
   password: {
     type: String,
@@ -35,7 +35,6 @@ const UsuarioSchema = Schema({
       icon: String,
       url: String
     }],
-    validate: [limitRrss, '{PATH} excede el límite de 3 redes sociales']
   },
   rol: {
     type: String,
@@ -43,10 +42,11 @@ const UsuarioSchema = Schema({
     default: 'USER_ROL',
     enum: ['ADMIN_ROL', 'USER_ROL']
   },
-  emprendimiento: {
-    type: Schema.Types.ObjectId,
-    ref: 'Emprendimiento'
-  },
+  // empresa: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Emprendimiento',
+  //   unique: true // ver si funciona
+  // },
   estado: {
     type: Boolean,
     default: true,
@@ -66,10 +66,6 @@ const UsuarioSchema = Schema({
     required: true
   }
 })
-
-function limitRrss(val) {
-  return val.length <= 3;
-}
 
 // Quitamos la versión, el password y el _id del usuario para no mostrarlo
 

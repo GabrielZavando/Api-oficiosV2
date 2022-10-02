@@ -4,9 +4,10 @@ const geocoder = require('../helpers/geocoder')
 const EmprendimientoSchema = Schema({
   usuario: {
     type: Schema.Types.ObjectId,
-    ref: "Usuario"
+    ref: "Usuario",
+    required: true
   },
-  emprendimiento: {
+  nombre: {
     type: String,
     required: [true, 'El nombre del emprendimiento es obligatorio'],
     maxlength: [40, 'El nombre de la empresa no puede tener más de 40 caracteres']
@@ -78,7 +79,7 @@ function limitRrss(val) {
 
 // Consumimos API Mapquest para añadir location y quitamos la direccion
 
-UsuarioSchema.pre('save', async function(next){
+EmprendimientoSchema.pre('save', async function(next){
   const loc = await geocoder.geocode(this.direccion)
   this.ubicacion = {
     type: 'Point',

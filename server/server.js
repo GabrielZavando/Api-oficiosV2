@@ -4,6 +4,7 @@ const cors = require('cors')
 
 // Rutas
 const usuarios = require('../routes/usuarios')
+const emprendimientos = require('../routes/emprendimientos')
 
 // Config Base de datos
 const {dbConnection} = require('../database/config')
@@ -38,6 +39,7 @@ class Server{
 
   routes(){
     this.app.use('/api/v1/usuarios', usuarios)
+    this.app.use('/api/v1/emprendimientos', emprendimientos)
   }
 
   listen(){

@@ -1,4 +1,4 @@
-const {request, response, json} = require('express')
+const {request, response} = require('express')
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcryptjs')
 
@@ -7,10 +7,10 @@ const bcrypt = require('bcryptjs')
 
 // Registrar un usuario
 const postUser = async (req = request, res = response) => {
-  const {nick, nombre, correo, password} = req.body
-  const usuario = new Usuario({nick, nombre, correo, password})
+  const {nick, nombre, correo, password, rrss} = req.body
+  const usuario = new Usuario({nick, nombre, correo, password, rrss})
   // Encriptar la contraseña
-  // salt = complejidad de la encriptación (10 por dfecto)
+  // salt = complejidad de la encriptación (10 por defecto)
   const salt = bcrypt.genSaltSync(12)
   usuario.password = bcrypt.hashSync(password, salt)
 

@@ -17,14 +17,21 @@ const emailExiste = async(correo = '') => {
 }
 
 const nickExiste = async(nick = '') => {
-  const existeEmail = await Usuario.findOne({nick})
-  if(nickEmail){
+  const nickExiste = await Usuario.findOne({nick})
+  if(nickExiste){
     throw new Error(`El nombre de usuario ${nick} ya está registrado, por favor eliga uno distinto`)
+  }
+}
+
+const maxRrss = async(rrss = []) => {
+  if(rrss.length > 3){
+    throw new Error('Sólo puedes registrar hasta 3 redes sociales')
   }
 }
 
 module.exports = {
   esOficioValido,
   emailExiste,
-  nickExiste
+  nickExiste,
+  maxRrss
 }
