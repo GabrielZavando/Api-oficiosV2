@@ -1,6 +1,7 @@
 const {request, response} = require('express')
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcryptjs')
+const { generarJWT } = require('../helpers/generar-jwt')
 
 // TODO
 // Establecer un formato de respuesta
@@ -33,6 +34,48 @@ const postUser = async (req = request, res = response) => {
 }
 
 // Login usuario
+const loginUser = async (req = request, res = response) => {
+  const {correo, password} = req.body
+  try{
+    // Verificar si el correo existe
+    const usuario = await Usuario.findOne({correo})
+    if (!usuario){
+      return res.status(400).json({
+        message: 'Usuario / Contraseña no son correctos - correo'
+      })
+    }
+
+    // Verificar que el usuario está activo
+    if (!usuario.estado){
+      return res.status(400).json({
+        message: 'Usuario / Contraseña no son correctos - estado: false'
+      })
+    }
+
+    // Verificar la contraseña
+    const validPassword = bcrypt.compareSync(password, usuario.password)
+    if (!validPassword){
+      return res.status(400).json({
+        message: 'Usuario / Contraseña no son correctos - password'
+      })
+    }
+
+    // Generar el JWT
+    const token = await generarJWT(usuario._id)
+
+    res.json({
+      usuario,
+      token
+    })
+
+  }catch(err){
+    console.log(err)
+    res.status(500).json({
+      ok: false,
+      message: 'Error del servidor'
+    })
+  }
+}
 
 // Obtener un usuario por id
 const getUser = async (req = request, res = response) => {
@@ -118,6 +161,7 @@ const searchUsersPaged = async (req = request, res = response) => {
 
 module.exports = {
   postUser,
+  loginUser,
   getUser,
   putUser,
   deleteUser,

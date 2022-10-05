@@ -24,6 +24,11 @@ router.post('/registrar', [
 ], UserController.postUser )
 
 //Login usuario
+router.post('/auth/login', [
+  check('correo', 'El correo es obligatorio').isEmail(),
+  check('password', 'La contraseña es obligatoria').not().isEmpty(),
+  validarCampos
+], UserController.loginUser)
 
 //Obtener usuario por id
 router.get('/:id', UserController.getUser)
