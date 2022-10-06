@@ -8,6 +8,7 @@ const {emailExiste, nickExiste, maxRrss} = require('../helpers/db-validators')
 
 // Controlador
 const UserController = require('../controllers/usuarios')
+const { validarJWT } = require('../middlewares/validar-jwt')
 
 // Rutas
 
@@ -37,7 +38,11 @@ router.get('/:id', UserController.getUser)
 router.put('/:id', UserController.putUser)
 
 // Eliminar usuario por id
-router.delete('/:id', UserController.deleteUser)
+router.delete('/:id', [
+  validarJWT,
+  check('id', 'No es un ID válido').isMongoId(),
+  validarCampos
+], UserController.deleteUser)
 
 // Obtener usuarios paginados
 router.get('/', UserController.getUsersPaged)

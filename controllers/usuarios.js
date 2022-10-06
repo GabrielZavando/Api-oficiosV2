@@ -108,13 +108,23 @@ const putUser = async (req = request, res = response) => {
 
 // Eliminar un usuario por id
 const deleteUser = async (req = request, res = response) => {
+  const {id} = req.params
   try {
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
+    const usuarioAutenticado = req.usuario
+
     res.status(200).json({
       ok: true,
-      message: 'Hola Mundo'
+      message: 'Usuario borrado correctamente',
+      usuario,
+      usuarioAutenticado
     })
   }catch(err){
     console.log(err)
+    response.status(500).json({
+      ok: false,
+      message: 'Error del servidor'
+    })
   }
 }
 
