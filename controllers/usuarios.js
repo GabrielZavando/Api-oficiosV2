@@ -8,8 +8,10 @@ const { generarJWT } = require('../helpers/generar-jwt')
 
 // Registrar un usuario
 const postUser = async (req = request, res = response) => {
-  const {nick, nombre, correo, password, rrss} = req.body
-  const usuario = new Usuario({nick, nombre, correo, password, rrss})
+  const {nickName, nombre, correo, password, rol = "USER_ROL"} = req.body
+  
+  const nick = nickName.split(" ").join("").toLowerCase()
+  const usuario = new Usuario({nick, nombre, correo, password, rol})
   // Encriptar la contraseña
   // salt = complejidad de la encriptación (10 por defecto)
   const salt = bcrypt.genSaltSync(12)
@@ -111,6 +113,7 @@ const deleteUser = async (req = request, res = response) => {
   const {id} = req.params
   try {
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
+    
     const usuarioAutenticado = req.usuario
 
     res.status(200).json({

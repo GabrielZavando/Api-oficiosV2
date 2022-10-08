@@ -2,11 +2,11 @@ const {Schema, model} = require('mongoose')
 const geocoder = require('../helpers/geocoder')
 
 const EmprendimientoSchema = Schema({
-  usuario: {
-    type: Schema.Types.ObjectId,
-    ref: "Usuario",
-    required: true
-  },
+  // usuario: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "Usuario",
+  //   required: true
+  // },
   nombre: {
     type: String,
     required: [true, 'El nombre del emprendimiento es obligatorio'],
@@ -64,7 +64,6 @@ const EmprendimientoSchema = Schema({
       icon: String,
       url: String
     }],
-    validate: [limitRrss, '{PATH} excede el límite de 3 redes sociales']
   },
   fechaRegistro: {
     type: Date,
@@ -72,10 +71,6 @@ const EmprendimientoSchema = Schema({
     required: true
   },
 })
-
-function limitRrss(val) {
-  return val.length <= 3;
-}
 
 // Consumimos API Mapquest para añadir location y quitamos la direccion
 
