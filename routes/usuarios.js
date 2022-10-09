@@ -3,14 +3,11 @@ const router = Router()
 
 // Middlewares
 const { check, query, checkBody } = require('express-validator')
-const {validarCampos} = require('../middlewares/validar-campos')
 const {emailExiste, nickExiste, maxRrss} = require('../helpers/db-validators')
+const {validarCampos, validarEstado, validarJWT, esAdminRol} = require('../middlewares')
 
 // Controlador
 const UserController = require('../controllers/usuarios')
-const { validarJWT } = require('../middlewares/validar-jwt')
-const { esAdminRol } = require('../middlewares/validar-rol')
-const { validarEstado } = require('../middlewares/validar-estado')
 
 // Rutas
 

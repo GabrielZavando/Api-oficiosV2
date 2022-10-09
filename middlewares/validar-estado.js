@@ -1,9 +1,9 @@
 const {response, request} = require('express')
 const Usuario = require('../models/usuario')
 
+// Validamos el estado de los usuarios cuya id recibimos por params
 const validarEstado = async(req = request, res = response, next) => {
   const {id} = req.params
-  console.log(id)
 
   try{
     const usuario = await Usuario.findById(id)
