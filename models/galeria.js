@@ -1,5 +1,5 @@
 
-const {Schema, model} = require('mongoose')
+import { Schema, model } from 'mongoose';
 
 const GaleriaSchema = Schema({
   emprendimiento: {
@@ -30,4 +30,4 @@ function limitImagen(val) {
   return val.length <= 10;
 }
 
-module.exports = model('Galeria', GaleriaSchema)
+export default model('Galeria', GaleriaSchema)

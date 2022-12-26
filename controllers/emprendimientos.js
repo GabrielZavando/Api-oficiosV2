@@ -1,5 +1,5 @@
-const {request, response} = require('express')
-const Emprendimiento = require('../models/emprendimiento')
+import { request, response } from 'express'
+import {Emprendimiento} from '../models/emprendimiento.js'
 
 // Registrar un emprendimiento
 const postEmprendimiento = async(req = request, res = response) =>{
@@ -22,6 +22,6 @@ const postEmprendimiento = async(req = request, res = response) =>{
   }
 }
 
-module.exports = {
+export {
   postEmprendimiento
 }

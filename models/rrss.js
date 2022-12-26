@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 const RedSocialSchema = Schema({
   name: String,
@@ -6,4 +6,4 @@ const RedSocialSchema = Schema({
   url: String
 })
 
-module.exports = model('RedSocial', RedSocialSchema)
+export default model('RedSocial', RedSocialSchema)

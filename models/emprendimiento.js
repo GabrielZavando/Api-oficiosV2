@@ -1,7 +1,7 @@
-const {Schema, model} = require('mongoose')
-const geocoder = require('../helpers/geocoder')
+import mongoose from 'mongoose'
+import { geocoder } from '../helpers/geocoder.js'
 
-const EmprendimientoSchema = Schema({
+const EmprendimientoSchema = new mongoose.Schema({
   // usuario: {
   //   type: Schema.Types.ObjectId,
   //   ref: "Usuario",
@@ -75,7 +75,7 @@ const EmprendimientoSchema = Schema({
 // Consumimos API Mapquest para añadir location y quitamos la direccion
 
 EmprendimientoSchema.pre('save', async function(next){
-  const loc = await geocoder.geocode(this.direccion)
+  const loc = await geocode(this.direccion)
   this.ubicacion = {
     type: 'Point',
     coordenadas: [loc[0].longitude, loc[0].latitude],
@@ -87,4 +87,6 @@ EmprendimientoSchema.pre('save', async function(next){
   next()
 })
 
-module.exports = model('Emprendimiento', EmprendimientoSchema)
+const Emprendimiento = mongoose.model('Emprendimiento', EmprendimientoSchema)
+
+export { Emprendimiento }

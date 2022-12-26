@@ -1,9 +1,11 @@
-const {Schema, model} = require('mongoose')
+import mongoose from 'mongoose'
 
-const OficioSchema = Schema({
+const OficioSchema = new mongoose.Schema({
   oficio: {
     type: String,
   }
 })
 
-module.exports = model('Oficio', OficioSchema)
+const Oficio = mongoose.model('Oficio', OficioSchema)
+
+export { Oficio }

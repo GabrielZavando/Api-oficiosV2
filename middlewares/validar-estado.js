@@ -1,5 +1,5 @@
-const {response, request} = require('express')
-const Usuario = require('../models/usuario')
+import { response, request } from 'express'
+import { Usuario } from '../models/usuario.js'
 
 // Validamos el estado de los usuarios cuya id recibimos por params
 const validarEstado = async(req = request, res = response, next) => {
@@ -25,6 +25,6 @@ const validarEstado = async(req = request, res = response, next) => {
   }
 }
 
-module.exports = {
+export {
   validarEstado
 }

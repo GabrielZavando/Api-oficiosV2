@@ -1,4 +1,4 @@
-const {response} = require('express')
+import { response } from 'express'
 
 const esAdminRol = (req, res = response, next) =>{
 
@@ -43,7 +43,7 @@ const tieneRol = (...roles) => {
   }
 }
 
-module.exports = {
-  esAdminRol, 
+export {
+  esAdminRol,
   tieneRol
 }

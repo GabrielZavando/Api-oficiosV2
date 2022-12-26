@@ -1,6 +1,7 @@
 
-const Oficio = require('../models/oficio')
-const Usuario = require('../models/usuario')
+import {Categoria} from '../models/categoria.js'
+import { Oficio } from '../models/oficio.js'
+import { Usuario } from '../models/usuario.js'
 
 const esOficioValido = async(oficio = '') => {
   const existeOficio = await Oficio.findOne({oficio})
@@ -29,9 +30,17 @@ const maxRrss = async(rrss = []) => {
   }
 }
 
-module.exports = {
+const categoriaExiste = async(categoria = '') => {
+  const categoriaDB = await Categoria.findOne({nombre: categoria})
+  if(!categoriaDB){
+    throw new Error(`No existe la categoria ${categoria}`)
+  }
+}
+
+export {
   esOficioValido,
   emailExiste,
   nickExiste,
-  maxRrss
+  maxRrss,
+  categoriaExiste
 }

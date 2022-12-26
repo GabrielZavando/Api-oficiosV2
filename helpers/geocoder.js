@@ -1,5 +1,5 @@
 
-const NodeGeocoder = require('node-geocoder')
+import NodeGeocoder from 'node-geocoder'
 
 const options = {
   provider: process.env.GEOCODER_PROVIDER,
@@ -9,4 +9,6 @@ const options = {
 
 const geocoder = NodeGeocoder(options)
 
-module.exports = geocoder
+export {
+  geocoder
+}

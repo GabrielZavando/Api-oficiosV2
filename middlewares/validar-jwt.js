@@ -1,7 +1,8 @@
 
-const {response, request} = require('express')
-const jwt = require('jsonwebtoken')
-const Usuario = require('../models/usuario')
+import { request, response } from 'express'
+import { verify } from 'jsonwebtoken'
+import { Usuario } from '../models/usuario.js'
+const secreto = process.env.SECRETORPRIVATEKEY
 
 const validarJWT = async (req = request, res = response, next) =>{
   const token = req.header('x-token')
@@ -13,8 +14,25 @@ const validarJWT = async (req = request, res = response, next) =>{
   }
 
   try{
+    // Verificamo si el token enviado es correcto o no cumple siquiera con el formato
+    const tokenValid = verify(token, secreto, function(err, decoded){
+      if(err != null){
+        return false
+      }else{
+        return true
+      }
+    })
 
-    const {uid} = jwt.verify(token, process.env.SECRETORPRIVATEKEY)
+    if(tokenValid === false){
+      return res.status(401).json({
+        ok: false,
+        message: 'Token no válido - error formato'
+      })
+    }
+
+    const {uid} = verify(token, secreto)
+
+    // Obtenemos el usuario de la base de datos gracias al id
     const usuario = await Usuario.findById(uid)
 
     // Verificamos que el usuario existe
@@ -33,8 +51,9 @@ const validarJWT = async (req = request, res = response, next) =>{
       })
     }
 
-    // Guardamos el usuario autenticado en el objeto req
+    // Guardamos el usuario autenticado y su uid en el objeto req
     req.usuario = usuario
+    req.uid = uid
 
     next()
   }catch(err){
@@ -46,6 +65,6 @@ const validarJWT = async (req = request, res = response, next) =>{
   }
 }
 
-module.exports = {
+export {
   validarJWT
 }

@@ -1,18 +1,27 @@
-const {Router} = require('express')
-const router = Router()
+import { Router } from 'express'
+const routeUsuarios = Router()
 
 // Middlewares
-const { check, query, checkBody } = require('express-validator')
-const {emailExiste, nickExiste, maxRrss} = require('../helpers/db-validators')
-const {validarCampos, validarEstado, validarJWT, esAdminRol} = require('../middlewares')
+
+import { check } from 'express-validator'
+import { emailExiste, nickExiste } from '../helpers/db-validators.js'
+import { validarCampos } from '../middlewares/validar-campos.js'
+import { validarEstado } from '../middlewares/validar-estado.js'
+import { validarJWT } from '../middlewares/validar-jwt.js'
+import { esAdminRol } from '../middlewares/validar-roles.js'
 
 // Controlador
-const UserController = require('../controllers/usuarios')
+import {
+  deleteUser, getUser, getUsersFeaturedPaged, getUsersPaged, loginUser,
+  loginUserGoogle, postUser, putUser, renewToken, searchUsersPaged
+} from '../controllers/usuarios.js'
 
 // Rutas
 
 // Registrar usuario
-router.post('/registrar', [
+routeUsuarios.post('/registrar', [
+  validarJWT,
+  esAdminRol,
   check('nick').custom(nickExiste),
   check('nombre', 'El nombre es obligatorio').notEmpty(),
   check('nombre', 'El nombre no puede tener más de 30 caracteres').isLength({max: 30}),
@@ -21,38 +30,49 @@ router.post('/registrar', [
   check('password', 'La contraseña debe tener al menos 6 caracteres').isLength({min: 6}),
   // check('rrss').custom(maxRrss), // Esta validación va en la ruta editar
   validarCampos
-], UserController.postUser )
+], postUser )
 
 //Login usuario
-router.post('/auth/login', [
+routeUsuarios.post('/auth/login', [
   check('correo', 'El correo es obligatorio').isEmail(),
   check('password', 'La contraseña es obligatoria').not().isEmpty(),
   validarCampos
-], UserController.loginUser)
+], loginUser)
+
+//Login usuario google
+routeUsuarios.post('/auth/google', [
+  check('id_token', 'Token de Google es necesario').not().isEmpty(),
+  validarCampos
+], loginUserGoogle)
+
+// Verificar y renovar token
+routeUsuarios.get('/auth/renew', [validarJWT, validarCampos], renewToken)
 
 //Obtener usuario por id
-router.get('/:id', UserController.getUser)
+routeUsuarios.get('/:id', getUser)
 
 // Editar usuario por id
-router.put('/:id', UserController.putUser)
+routeUsuarios.put('/:id', putUser)
 
 // Eliminar usuario por id
-router.delete('/:id', [
+routeUsuarios.delete('/:id', [
   validarJWT,
   esAdminRol,
   validarEstado,
   check('id', 'No es un ID válido').isMongoId(),
   validarCampos
-], UserController.deleteUser)
+], deleteUser)
 
 // Obtener usuarios paginados
-router.get('/', UserController.getUsersPaged)
+routeUsuarios.get('/', getUsersPaged)
 
 // Obtener usuarios destacados y paginados
-router.get('/:id', UserController.getUsersFeaturedPaged)
+routeUsuarios.get('/:id', getUsersFeaturedPaged)
 
 // Buscar usuarios por termino paginados
-router.get('/:id', UserController.searchUsersPaged)
+routeUsuarios.get('/:id', searchUsersPaged)
 
 
-module.exports = router
+export {
+  routeUsuarios
+}

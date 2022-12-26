@@ -1,10 +1,10 @@
-const {Schema, model} = require('mongoose')
+import mongoose from 'mongoose'
 
-const UsuarioSchema = Schema({
+const UsuarioSchema = new mongoose.Schema({
   nick: {
     type: String,
     unique: true,
-    required: [true, 'El nombre de usuario es obligatorio'],
+    required: [false, 'El nombre de usuario es obligatorio'],
     maxlength: [12, 'El nombre de usuario no puede tener más de 12 caracteres']
   },
   avatar: {
@@ -28,6 +28,11 @@ const UsuarioSchema = Schema({
   telefono: {
     type: String,
     maxlength: [15, 'El teléfono no puede tener más de 15 caracteres']
+  },
+  categoria: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Categoria',
+    required: false,
   },
   rrss: {
     type: [{
@@ -75,4 +80,6 @@ UsuarioSchema.methods.toJSON = function(){
   return usuario // este usuario sólo se muestra en las respuestas del backend, en la base de datos se almacena el usuario exacto del modelo, incluído el _id.
 }
 
-module.exports = model('Usuario', UsuarioSchema)
+const Usuario = mongoose.model('Usuario', UsuarioSchema)
+
+export { Usuario }

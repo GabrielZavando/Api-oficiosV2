@@ -1,14 +1,18 @@
-const {Router} = require('express')
-const router = Router()
+import { Router } from 'express'
+const routeEmprendimientos = Router()
 
 // Middlewares
 
 // Controlador
-const EmprendimientoController = require('../controllers/emprendimientos')
+import {
+  postEmprendimiento
+} from '../controllers/emprendimientos.js'
 
 // Rutas
 
 // Registrar emprendimiento
-router.post('/registrar', EmprendimientoController.postEmprendimiento)
+routeEmprendimientos.post('/registrar', postEmprendimiento)
 
-module.exports = router
+export {
+  routeEmprendimientos
+}

@@ -1,13 +1,15 @@
 
-const express = require('express')
-const cors = require('cors')
+import cors from 'cors'
+import express from 'express'
+
 
 // Rutas
-const usuarios = require('../routes/usuarios')
-const emprendimientos = require('../routes/emprendimientos')
+import { routeCategorias } from '../routes/categorias.js'
+import { routeEmprendimientos } from '../routes/emprendimientos.js'
+import { routeUsuarios } from '../routes/usuarios.js'
 
 // Config Base de datos
-const {dbConnection} = require('../database/config')
+import { dbConnection } from '../database/config.js'
 
 class Server{
   constructor(){
@@ -38,8 +40,9 @@ class Server{
   }
 
   routes(){
-    this.app.use('/api/v1/usuarios', usuarios)
-    this.app.use('/api/v1/emprendimientos', emprendimientos)
+    this.app.use('/api/v1/usuarios', routeUsuarios)
+    this.app.use('/api/v1/categorias', routeCategorias)
+    this.app.use('/api/v1/emprendimientos', routeEmprendimientos)
   }
 
   listen(){
@@ -49,4 +52,4 @@ class Server{
   }
 }
 
-module.exports = Server;
+export { Server }
