@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { request, response } from 'express'
 import { generarJWT } from '../helpers/generar-jwt.js'
-import { googleVerify } from '../helpers/google-verify.js'
 import { Categoria } from '../models/categoria.js'
 import { Usuario } from '../models/usuario.js'
 
@@ -97,59 +96,6 @@ const loginUser = async (req = request, res = response) => {
   }
 }
 
-// Login usuario con google
-
-const loginUserGoogle = async(req = request, res = response) => {
-  const {id_token} = req.body
-
-  try{
-    const {nombre, avatar, correo} = await googleVerify(id_token)
-
-    let usuario = await Usuario.findOne({correo})
-
-    if(!usuario){
-      // Tenemos que crearlo
-      const data = {
-        nombre,
-        correo,
-        password: '123456', // Le pongo algo sólo porque en el modelo es obligatorio
-        avatar,
-        googleSign: true
-      }
-
-      usuario = new Usuario(data)
-
-      await usuario.save()
-    }
-
-    // Si el usuario en base de datos tiene estado: false
-    if(!usuario.estado){
-      return res.status(401).json({
-        ok: false,
-        message: 'Usuario bloqueado, hable con el administrador'
-      })
-    }
-
-    // Generar el JWT
-    const token = await generarJWT(usuario.id)
-
-    res.status(200).json({
-      ok: true,
-      usuario,
-      token
-    })
-  }catch(err){
-    console.log(err)
-
-    res.status(400).json({
-      ok: false,
-      message: 'El token no se pudo verificar'
-    })
-
-  }
-
-
-}
 
 // Verificar y renovar token
 const renewToken = async (req = request, res = response) => {
@@ -277,7 +223,6 @@ const searchUsersPaged = async (req = request, res = response) => {
 export {
   postUser,
   loginUser,
-  loginUserGoogle,
   renewToken,
   getUser,
   putUser,

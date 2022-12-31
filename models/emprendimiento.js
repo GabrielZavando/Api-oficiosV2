@@ -2,11 +2,6 @@ import mongoose from 'mongoose'
 import { geocoder } from '../helpers/geocoder.js'
 
 const EmprendimientoSchema = new mongoose.Schema({
-  // usuario: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "Usuario",
-  //   required: true
-  // },
   nombre: {
     type: String,
     required: [true, 'El nombre del emprendimiento es obligatorio'],
@@ -18,15 +13,12 @@ const EmprendimientoSchema = new mongoose.Schema({
     maxlength: [150, 'La descripción no puede tener más de 150 caracteres']
   },
   banner: {
-    type: String
+    type: String,
+    required: false
   },
   logo: {
-    type: String
-  },
-  tipo: {
     type: String,
-    required: true,
-    enum: ['Cultor','Maestro','Creativo']
+    required: false
   },
   oficio: {
     type: String,
@@ -75,7 +67,7 @@ const EmprendimientoSchema = new mongoose.Schema({
 // Consumimos API Mapquest para añadir location y quitamos la direccion
 
 EmprendimientoSchema.pre('save', async function(next){
-  const loc = await geocode(this.direccion)
+  const loc = await geocoder(this.direccion)
   this.ubicacion = {
     type: 'Point',
     coordenadas: [loc[0].longitude, loc[0].latitude],

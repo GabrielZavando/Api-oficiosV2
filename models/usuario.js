@@ -8,7 +8,9 @@ const UsuarioSchema = new mongoose.Schema({
     maxlength: [12, 'El nombre de usuario no puede tener más de 12 caracteres']
   },
   avatar: {
-    type: String
+    type: String,
+    required: false
+    // podría dejar una imagen por default
   },
   nombre: {
     type: String,
@@ -40,26 +42,28 @@ const UsuarioSchema = new mongoose.Schema({
       icon: String,
       url: String
     }],
+    maxlength: 3,
+    required: false
   },
   rol: {
     type: String,
     required: true,
     default: 'USER_ROL',
     enum: ['ADMIN_ROL', 'USER_ROL']
+    // Puede quedar así pero puedo mejorarlo contrastando con BD
   },
-  // empresa: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Emprendimiento',
-  //   unique: true // ver si funciona
-  // },
+  emprendimientos: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Emprendimiento'
+    }],
+    maxlength: 2,
+    required: false
+  },
   estado: {
     type: Boolean,
     default: true,
     required: true
-  },
-  googleSign: {
-    type: Boolean,
-    default: false
   },
   destacado: {
     type: Boolean,
