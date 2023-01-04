@@ -1,5 +1,6 @@
 
 import cors from 'cors'
+import fileUpload from 'express-fileupload'
 import express from 'express'
 
 
@@ -7,6 +8,7 @@ import express from 'express'
 import { routeCategorias } from '../routes/categorias.js'
 import { routeEmprendimientos } from '../routes/emprendimientos.js'
 import { routeUsuarios } from '../routes/usuarios.js'
+import { routeUploads } from '../routes/uploads.js'
 
 // Config Base de datos
 import { dbConnection } from '../database/config.js'
@@ -37,12 +39,19 @@ class Server{
 
     // Directorio público
     this.app.use(express.static('public'))
+
+    //Fileupload - Carga de archivos
+    this.app.use(fileUpload({
+      useTempFiles: true,
+      tempFileDir: '/tmp/'
+    }))
   }
 
   routes(){
     this.app.use('/api/v1/usuarios', routeUsuarios)
     this.app.use('/api/v1/categorias', routeCategorias)
     this.app.use('/api/v1/emprendimientos', routeEmprendimientos)
+    this.app.use('/api/v1/uploads', routeUploads)
   }
 
   listen(){
